@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class FrequencySweep
+    internal sealed class FrequencySweep
     {
         private static readonly int Divider = Gameboy.TicksPerSec / 128;
 

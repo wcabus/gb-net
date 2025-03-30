@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace GB.Core.Serial
 {
-    internal class SerialPort : IAddressSpace
+    internal sealed class SerialPort : IAddressSpace
     {
         private readonly ISerialEndpoint _serialEndpoint;
         private readonly InterruptManager _interruptManager;

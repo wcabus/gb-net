@@ -2,7 +2,7 @@
 
 namespace GB.Core.Graphics
 {
-    internal class Lcdc : IAddressSpace
+    internal sealed class Lcdc : IAddressSpace
     {
         private int _value = 0x91;
 

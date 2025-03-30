@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace GB.Core.Memory
 {
-    internal class Hdma : IAddressSpace
+    internal sealed class Hdma : IAddressSpace
     {
         private const int Hdma1 = 0xFF51;
         private const int Hdma2 = 0xFF52;

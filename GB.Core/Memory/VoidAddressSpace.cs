@@ -2,7 +2,7 @@
 
 namespace GB.Core.Memory
 {
-    internal class VoidAddressSpace : IAddressSpace
+    internal sealed class VoidAddressSpace : IAddressSpace
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Accepts(int address) => true;

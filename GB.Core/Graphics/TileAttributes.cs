@@ -2,7 +2,7 @@
 
 namespace GB.Core.Graphics
 {
-    internal class TileAttributes
+    internal sealed class TileAttributes
     {
         public static TileAttributes Empty { get; }
         private static readonly TileAttributes[] Attributes;

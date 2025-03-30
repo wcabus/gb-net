@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace GB.Core.Cpu.InstructionSet
 {
-    internal class InstructionBuilder
+    internal sealed class InstructionBuilder
     {
         private DataType _lastUsedDataType = DataType.None;
 

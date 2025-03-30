@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Memory.Cartridge.Type
 {
-    internal class Rom : IAddressSpace
+    internal sealed class Rom : IAddressSpace
     {
         private readonly int[] _rom;
 

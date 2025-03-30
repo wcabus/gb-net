@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Memory.Cartridge.Battery
 {
-    internal class NullBattery : IBattery
+    internal sealed class NullBattery : IBattery
     {
         public void LoadRam(int[] ram)
         {

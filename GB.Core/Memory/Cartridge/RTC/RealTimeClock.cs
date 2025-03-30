@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Memory.Cartridge.RTC
 {
-    internal class RealTimeClock
+    internal sealed class RealTimeClock
     {
         private readonly IClock _clock;
         private long _offsetSec;

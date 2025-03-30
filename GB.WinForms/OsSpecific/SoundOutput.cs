@@ -5,7 +5,7 @@ using NAudio.Wave.SampleProviders;
 
 namespace GB.WinForms.OsSpecific
 {
-    internal class SoundOutput : ISoundOutput
+    internal sealed class SoundOutput : ISoundOutput
     {
         private const int BufferSize = 1024;
         public const int SampleRate = 22050;
@@ -62,7 +62,7 @@ namespace GB.WinForms.OsSpecific
         }
     }
 
-    public class AudioPlaybackEngine : IDisposable
+    public sealed class AudioPlaybackEngine : IDisposable
     {
         private IWavePlayer _outputDevice;
         private readonly MixingSampleProvider _mixer;

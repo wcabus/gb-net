@@ -2,7 +2,7 @@
 
 namespace GB.Core.Cpu
 {
-    internal class SpeedMode : IAddressSpace
+    internal sealed class SpeedMode : IAddressSpace
     {
         private bool _currentSpeed = false;
         private int _speed = 1;

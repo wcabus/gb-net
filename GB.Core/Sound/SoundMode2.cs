@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class SoundMode2 : SoundModeBase
+    internal sealed class SoundMode2 : SoundModeBase
     {
         private int _freqDivider;
         private int _lastOutput;

@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Graphics
 {
-    internal class ColorPixelFifo : IPixelFifo
+    internal sealed class ColorPixelFifo : IPixelFifo
     {
         private readonly IntQueue _pixels = new(16);
         private readonly IntQueue _palettes = new(16);

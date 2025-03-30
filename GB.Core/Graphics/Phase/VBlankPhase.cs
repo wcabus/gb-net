@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Graphics.Phase
 {
-    internal class VBlankPhase : IGpuPhase
+    internal sealed class VBlankPhase : IGpuPhase
     {
         private int _ticks;
 

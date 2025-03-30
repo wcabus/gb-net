@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace GB.Core.Controller
 {
-    internal class JoyPadButtonListener : IButtonListener
+    internal sealed class JoyPadButtonListener : IButtonListener
     {
         private readonly InterruptManager _interruptManager;
         private readonly ConcurrentDictionary<Button, Button> _buttons;

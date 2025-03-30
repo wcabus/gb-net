@@ -9,7 +9,7 @@ using GB.Core.Sound;
 
 namespace GB.Core
 {
-    public class Gameboy : IRunnable
+    public sealed class Gameboy : IRunnable
     {
         public const int TicksPerSec = 4_194_304;
 

@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class Lfsr
+    internal sealed class Lfsr
     {
         public int Value { get; private set; }
 

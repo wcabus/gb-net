@@ -2,7 +2,7 @@ using GB.Core.Memory;
 
 namespace GB.Core.Sound
 {
-    internal class Sound : IAddressSpace
+    internal sealed class Sound : IAddressSpace
     {
         private static readonly int[] Masks = {
             0x80, 0x3F, 0x00, 0xFF, 0xBF,

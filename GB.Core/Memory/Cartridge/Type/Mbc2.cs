@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GB.Core.Memory.Cartridge.Type
 {
-    internal class Mbc2 : IAddressSpace
+    internal sealed class Mbc2 : IAddressSpace
     {
         private readonly int[] _cartridge;
         private readonly int[] _ram;

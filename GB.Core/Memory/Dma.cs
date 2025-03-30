@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace GB.Core.Memory
 {
-    internal class Dma : IAddressSpace
+    internal sealed class Dma : IAddressSpace
     {
         private readonly IAddressSpace _addressSpace;
         private readonly IAddressSpace _oam;

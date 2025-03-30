@@ -2,7 +2,7 @@
 
 namespace GB.Core.Memory
 {
-    internal class ShadowAddressSpace : IAddressSpace
+    internal sealed class ShadowAddressSpace : IAddressSpace
     {
         private readonly IAddressSpace _addressSpace;
         private readonly int _echoStart;

@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Controller
 {
-    public class Button
+    public sealed class Button
     {
         public static Button Right = new Button(0x01, 0x10);
         public static Button Left = new Button(0x02, 0x10);

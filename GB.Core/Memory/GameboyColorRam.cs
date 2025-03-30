@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Memory
 {
-    internal class GameboyColorRam : IAddressSpace
+    internal sealed class GameboyColorRam : IAddressSpace
     {
         private readonly int[] _ram = new int[7 * 0x1000];
         private int _svbk;

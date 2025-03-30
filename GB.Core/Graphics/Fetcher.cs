@@ -3,7 +3,7 @@ using GB.Core.Memory;
 
 namespace GB.Core.Graphics
 {
-    internal class Fetcher
+    internal sealed class Fetcher
     {
         private enum State
         {

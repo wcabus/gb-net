@@ -2,7 +2,7 @@
 
 namespace GB.Core.Memory
 {
-    internal class DmaAddressSpace : IAddressSpace
+    internal sealed class DmaAddressSpace : IAddressSpace
     {
         private readonly IAddressSpace _addressSpace;
 

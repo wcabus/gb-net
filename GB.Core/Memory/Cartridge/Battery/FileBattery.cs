@@ -3,7 +3,7 @@ using System.Text;
 
 namespace GB.Core.Memory.Cartridge.Battery
 {
-    internal class FileBattery : IBattery
+    internal sealed class FileBattery : IBattery
     {
         private readonly string _ramFilePath;
         private readonly FileStream? _file;

@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class PolynomialCounter
+    internal sealed class PolynomialCounter
     {
         private int _i;
         private int _shiftedDivisor;

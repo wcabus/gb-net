@@ -2,7 +2,7 @@
 
 namespace GB.Core.Memory
 {
-    internal class Ram : IAddressSpace
+    internal sealed class Ram : IAddressSpace
     {
         private readonly int[] _space;
         private readonly int _length;

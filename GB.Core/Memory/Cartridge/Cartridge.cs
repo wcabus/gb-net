@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GB.Core.Memory.Cartridge
 {
-    public class Cartridge : IAddressSpace, IDisposable
+    public sealed class Cartridge : IAddressSpace, IDisposable
     {
         private int[] _romData = Array.Empty<int>();
         private IAddressSpace? _addressSpace;
@@ -24,6 +24,7 @@ namespace GB.Core.Memory.Cartridge
         private Cartridge(string cartridgeFilePath) 
         {
             _cartridgeFilePath = cartridgeFilePath;
+            _battery = new FileBattery(this);
         }
 
         public static Cartridge? FromFile(string path)
@@ -64,8 +65,6 @@ namespace GB.Core.Memory.Cartridge
             {
                 ramBanks = 1;
             }
-
-            _battery = new FileBattery(this);
 
             if (type.IsMbc1())
             {

@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class VolumeEnvelope
+    internal sealed class VolumeEnvelope
     {
         private int _initialVolume;
         private int _envelopeDirection;

@@ -174,7 +174,7 @@ namespace GB.WinForms
             // Check the sender
             clickedToolStripMenuItem.CheckState = CheckState.Checked;
 
-            _emulator.GameBoyMode = (GameBoyMode)clickedToolStripMenuItem.Tag;
+            _emulator.GameBoyMode = (GameBoyMode)clickedToolStripMenuItem.Tag!;
         }
     }
 }

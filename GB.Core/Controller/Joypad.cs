@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace GB.Core.Controller
 {
-    internal class Joypad : IAddressSpace
+    internal sealed class Joypad : IAddressSpace
     {
         private readonly ConcurrentDictionary<Button, Button> _buttons = new();
         private int _p1;

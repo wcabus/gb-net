@@ -3,7 +3,7 @@ using GB.Core.Graphics;
 
 namespace GB.Core.Cpu
 {
-    internal class Processor
+    internal sealed class Processor
     {
         private readonly CpuRegisters _registers;
 

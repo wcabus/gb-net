@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class SoundMode1 : SoundModeBase
+    internal sealed class SoundMode1 : SoundModeBase
     {
         private int _freqDivider;
         private int _lastOutput;
@@ -120,7 +120,7 @@
             _freqDivider = GetFrequency() * 4;
         }
 
-        protected bool UpdateSweep()
+        private bool UpdateSweep()
         {
             _frequencySweep.Tick();
             if (ChannelEnabled && !_frequencySweep.IsEnabled())

@@ -9,17 +9,26 @@ const { setModuleImports, getAssemblyExports, getConfig, runMain } = await dotne
     .create();
 
 const drawContext = document.getElementById('viewport').getContext('2d');
+let _rgbaView = null;
+let _width = null;
+let _height = null;
+
+function setupBuffer(rgbaView, width, height) {
+    _rgbaView = rgbaView;
+    _width = width;
+    _height = height;
+}
+
+async function outputImage() {
+    const rgbaCopy = new Uint8ClampedArray(_rgbaView.slice());
+    const imageData = new ImageData(rgbaCopy, _width, _height, {});
+    const image = await createImageBitmap(imageData);
+    drawContext.drawImage(image, 0, 0, _width * 4, _height * 4);
+}
 
 setModuleImports('main.js', {
-    outputImage: (pixels, width, height) => {
-        var arr = new Uint8ClampedArray(pixels.length);
-        arr.set(pixels, 0);
-
-        var imageData = new ImageData(arr, width, height, {});
-        createImageBitmap(imageData).then(image => {
-            drawContext.drawImage(image, 0, 0, width * 4, height * 4);
-        });
-    }
+    setupBuffer,
+    outputImage,
 });
 
 const config = getConfig();

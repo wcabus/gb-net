@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Graphics
 {
-    public class NullDisplay : IDisplay
+    public sealed class NullDisplay : IDisplay
     {
         public bool Enabled { get; set; }
 

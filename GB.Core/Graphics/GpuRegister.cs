@@ -2,7 +2,7 @@
 
 namespace GB.Core.Graphics
 {
-    internal class GpuRegister : IRegister
+    internal sealed class GpuRegister : IRegister
     {
         public static GpuRegister Stat = new GpuRegister(0xFF41, RegisterType.RW);
         public static GpuRegister Scy = new GpuRegister(0xFF42, RegisterType.RW);

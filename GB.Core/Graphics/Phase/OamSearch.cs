@@ -2,7 +2,7 @@
 
 namespace GB.Core.Graphics.Phase
 {
-    internal class OamSearch : IGpuPhase
+    internal sealed class OamSearch : IGpuPhase
     {
         private enum State
         {

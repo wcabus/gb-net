@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class LengthCounter
+    internal sealed class LengthCounter
     {
         private long _i;
         private readonly int _divider = Gameboy.TicksPerSec / 256;

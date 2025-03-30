@@ -2,7 +2,7 @@ using GB.Core.Cpu;
 
 namespace GB.Core
 {
-    internal class Timer : IAddressSpace
+    internal sealed class Timer : IAddressSpace
     {
         private readonly SpeedMode _speedMode;
         private readonly InterruptManager _interruptManager;

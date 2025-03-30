@@ -2,7 +2,7 @@
 
 namespace GB.Core.Sound
 {
-    internal class SoundMode3 : SoundModeBase
+    internal sealed class SoundMode3 : SoundModeBase
     {
         private static readonly int[] DmgWave =
         {

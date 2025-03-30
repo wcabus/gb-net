@@ -2,7 +2,7 @@
 
 namespace GB.Core.Graphics
 {
-    internal class DmgPixelFifo : IPixelFifo
+    internal sealed class DmgPixelFifo : IPixelFifo
     {
         public IntQueue Pixels { get; } = new(16);
         private readonly IntQueue _palettes = new(16);

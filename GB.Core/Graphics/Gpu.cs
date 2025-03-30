@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace GB.Core.Graphics
 {
-    internal class Gpu : IAddressSpace
+    internal sealed class Gpu : IAddressSpace
     {
         public enum Mode
         {

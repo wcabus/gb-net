@@ -2,7 +2,7 @@
 
 namespace GB.Core.Cpu
 {
-    internal class InterruptManager : IAddressSpace
+    internal sealed class InterruptManager : IAddressSpace
     {
         private bool _ime;
         private readonly bool _gbc;
@@ -118,7 +118,7 @@ namespace GB.Core.Cpu
             }
         }
 
-        public class InterruptType
+        public sealed class InterruptType
         {
             public static InterruptType None = new InterruptType(-1, -1);
 

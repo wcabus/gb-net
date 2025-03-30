@@ -2,7 +2,7 @@
 
 namespace GB.Core.Graphics
 {
-    internal class ColorPalette : IAddressSpace
+    internal sealed class ColorPalette : IAddressSpace
     {
         private readonly int _indexAddress;
         private readonly int _dataAddress;

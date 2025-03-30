@@ -2,7 +2,7 @@
 
 namespace GB.Core.Memory.Cartridge.Type
 {
-    internal class Mbc5 : IAddressSpace
+    internal sealed class Mbc5 : IAddressSpace
     {
         private readonly int _ramBanks;
         private readonly int[] _cartridge;

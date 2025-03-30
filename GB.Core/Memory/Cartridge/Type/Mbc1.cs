@@ -3,7 +3,7 @@ using System;
 
 namespace GB.Core.Memory.Cartridge.Type
 {
-    internal class Mbc1 : IAddressSpace
+    internal sealed class Mbc1 : IAddressSpace
     {
         private static readonly int[] NintendoLogo =
         {

@@ -6,7 +6,7 @@ using GB.Core.Sound;
 
 namespace GB.Core.Gui
 {
-    public class Emulator : IRunnable
+    public sealed class Emulator : IRunnable
     {
         private Cartridge? _cartridge;
 

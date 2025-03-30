@@ -2,7 +2,7 @@
 
 namespace GB.Core.Graphics.Phase
 {
-    internal class PixelTransfer : IGpuPhase
+    internal sealed class PixelTransfer : IGpuPhase
     {
         private readonly IPixelFifo _fifo;
         private readonly Fetcher _fetcher;

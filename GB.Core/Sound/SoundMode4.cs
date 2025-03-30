@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Sound
 {
-    internal class SoundMode4 : SoundModeBase
+    internal sealed class SoundMode4 : SoundModeBase
     {
         private int _lastResult;
         private readonly VolumeEnvelope _volumeEnvelope;

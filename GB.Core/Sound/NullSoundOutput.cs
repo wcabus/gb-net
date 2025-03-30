@@ -1,6 +1,6 @@
 namespace GB.Core.Sound
 {
-    public class NullSoundOutput : ISoundOutput
+    public sealed class NullSoundOutput : ISoundOutput
     {
         public void Start()
         {

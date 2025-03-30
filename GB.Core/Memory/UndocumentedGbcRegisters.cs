@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Memory
 {
-    internal class UndocumentedGbcRegisters : IAddressSpace
+    internal sealed class UndocumentedGbcRegisters : IAddressSpace
     {
         private readonly Ram _ram = new(0xFF72, 6);
         private int _xFF6C;

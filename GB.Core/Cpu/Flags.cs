@@ -2,7 +2,7 @@
 
 namespace GB.Core.Cpu
 {
-    internal class Flags
+    internal sealed class Flags
     {
         public const int ZeroPosition = 7;
         public const int NegativePosition = 6;

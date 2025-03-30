@@ -1,6 +1,6 @@
 ﻿namespace GB.Core.Serial
 {
-    public class NullSerialEndpoint : ISerialEndpoint
+    public sealed class NullSerialEndpoint : ISerialEndpoint
     {
         public bool ExternalClockPulsed() => false;
         public int Transfer(int outgoing)

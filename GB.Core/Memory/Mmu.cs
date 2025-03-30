@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace GB.Core.Memory
 {
-    internal class Mmu : IAddressSpace
+    internal sealed class Mmu : IAddressSpace
     {
         private static readonly IAddressSpace Void = new VoidAddressSpace();
 

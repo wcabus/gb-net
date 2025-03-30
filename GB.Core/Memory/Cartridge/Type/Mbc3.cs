@@ -3,7 +3,7 @@ using GB.Core.Memory.Cartridge.RTC;
 
 namespace GB.Core.Memory.Cartridge.Type
 {
-    internal class Mbc3 : IAddressSpace
+    internal sealed class Mbc3 : IAddressSpace
     {
         private readonly int[] _cartridge;
         private readonly int[] _ram;

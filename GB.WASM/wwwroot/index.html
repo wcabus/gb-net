@@ -22,6 +22,13 @@
           justify-content: center;
       }
 
+      .footer {
+          display: flex;
+          flex: 1;
+          align-items: center;
+          justify-content: center;
+      }
+
       .viewport {
           border: 2px solid #051f2a;
           background: #e6f8da;
@@ -30,10 +37,14 @@
 </head>
 
 <body class="main">
-<div class="flex-center">
-    <canvas id="viewport" width="640" height="576" class="viewport"></canvas>
-</div>
-<script type="module" src="./main.js"></script>
+    <div class="flex-center">
+        <canvas id="viewport" width="640" height="576" class="viewport"></canvas>
+    </div>
+    <div class="footer">
+        <a href="https://github.com/wcabus/gb-net">Fork me on github</a><br/>
+        <div>Controls: W, A, S, D, K, O, ENTER, BACKSPACE</div><br/>
+    <script type="module" src="./main.js"></script>
+    <script src="./coi-serviceworker.min.js"></script>
 </body>
 
 </html>

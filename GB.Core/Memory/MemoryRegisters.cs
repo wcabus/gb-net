@@ -2,7 +2,7 @@
 
 namespace GB.Core.Memory
 {
-    internal class MemoryRegisters : IAddressSpace
+    internal sealed class MemoryRegisters : IAddressSpace
     {
         private readonly Dictionary<int, IRegister> _registers;
         private readonly Dictionary<int, int> _values = new Dictionary<int, int>();
