@@ -137,6 +137,8 @@ public sealed class WebDisplay : IDisplay
             await Interop.OutputImage();
             _refreshDone.Set();
         }, null);
+
+        _i = 0;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

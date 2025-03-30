@@ -23,7 +23,7 @@ async function outputImage() {
     const rgbaCopy = new Uint8ClampedArray(_rgbaView.slice());
     const imageData = new ImageData(rgbaCopy, _width, _height, {});
     const image = await createImageBitmap(imageData);
-    drawContext.drawImage(image, 0, 0, _width * 4, _width * 4);
+    drawContext.drawImage(image, 0, 0, _width * 4, _height * 4);
 }
 
 setModuleImports('main.js', {
