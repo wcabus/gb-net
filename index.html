@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--  Licensed to the .NET Foundation under one or more agreements. -->
+<!-- The .NET Foundation licenses this file to you under the MIT license. -->
+<html>
+
+<head>
+  <title>GB.WASM</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+      .main {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+      }
+
+      .flex-center {
+          display: flex;
+          height: 100vh;
+          flex: 1;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .footer {
+          display: flex;
+          flex: 1;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .viewport {
+          border: 2px solid #051f2a;
+          background: #e6f8da;
+      }
+  </style>
+</head>
+
+<body class="main">
+    <div class="flex-center">
+        <canvas id="viewport" width="640" height="576" class="viewport"></canvas>
+    </div>
+    <div class="footer">
+        <a href="https://github.com/wcabus/gb-net">Fork me on github</a><br/>
+        <div>Controls: W, A, S, D, K, O, ENTER, BACKSPACE</div><br/>
+    <script type="module" src="./main.js"></script>
+    <script src="./coi-serviceworker.min.js"></script>
+</body>
+
+</html>
