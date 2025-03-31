@@ -13,10 +13,27 @@ let _rgbaView = null;
 let _width = null;
 let _height = null;
 
+let _soundBuffer = null;
+let _soundBufferLength = 0;
+let _audioCtx = null;
+let _audioBuffer = null;
+let _leftChannel = null;
+let _rightChannel = null;
+
 function setupBuffer(rgbaView, width, height) {
     _rgbaView = rgbaView;
     _width = width;
     _height = height;
+}
+
+function setupSoundBuffer(soundBuffer, length) {
+    _soundBuffer = soundBuffer;
+    _soundBufferLength = length;
+
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    _audioBuffer = _audioCtx.createBuffer(2, _soundBufferLength, 22050);
+    _leftChannel = _audioBuffer.getChannelData(0);
+    _rightChannel = _audioBuffer.getChannelData(1);
 }
 
 async function outputImage() {
@@ -26,9 +43,29 @@ async function outputImage() {
     drawContext.drawImage(image, 0, 0, _width * 4, _height * 4);
 }
 
+async function outputSound() {
+    const soundBufferCopy = new Float32Array(_soundBuffer.slice());
+    if (_audioCtx === undefined || _audioCtx === null || _audioCtx.state !== 'running') {
+        return;
+    }
+
+    let j = 0;
+    for (let i = 0; i < _soundBufferLength; i += 2) {
+        _leftChannel[j] = soundBufferCopy[i];
+        _rightChannel[j++] = soundBufferCopy[i + 1];
+    }
+
+    const source = _audioCtx.createBufferSource();
+    source.buffer = _audioBuffer;
+    source.connect(_audioCtx.destination);
+    source.start();
+}
+
 setModuleImports('main.js', {
     setupBuffer,
+    setupSoundBuffer,
     outputImage,
+    outputSound
 });
 
 const config = getConfig();
@@ -49,5 +86,23 @@ window.addEventListener('keyup', async (e) => {
 
     await exports.Interop.KeyUp(e.code);
 });
+
+const button = document.getElementById('audioButton');
+button.addEventListener('click', toggleAudio);
+
+async function toggleAudio() {
+    if (_audioCtx === undefined || _audioCtx === null) {
+        return;
+    }
+
+    if (_audioCtx.state === 'suspended') {
+        await _audioCtx.resume();
+        button.textContent = 'Suspend audio';
+    }
+    else if (_audioCtx.state === 'running') {
+        await _audioCtx.suspend();
+        button.textContent = 'Resume audio';
+    }
+}
 
 await runMain();

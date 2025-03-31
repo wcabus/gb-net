@@ -10,6 +10,12 @@ public partial class Interop
     [JSImport("outputImage", "main.js")]
     internal static partial Task OutputImage();
 
+    [JSImport("setupSoundBuffer", "main.js")]
+    internal static partial void SetupSoundBuffer([JSMarshalAs<JSType.MemoryView>] ArraySegment<double> soundBuffer, int length);
+
+    [JSImport("outputSound", "main.js")]
+    internal static partial Task OutputSound();
+
     [JSExport]
     internal static Task KeyDown(string keyCode)
     {

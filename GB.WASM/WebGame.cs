@@ -12,8 +12,8 @@ public sealed class WebGame : IController, IDisposable
     private IButtonListener _listener;
     private readonly WebDisplay _display = new();
 
-    // private readonly ISoundOutput _soundOutput = new SoundOutput();
-    private readonly ISoundOutput _soundOutput = new NullSoundOutput();
+    private readonly ISoundOutput _soundOutput = new WebAudio();
+    // private readonly ISoundOutput _soundOutput = new NullSoundOutput();
     private readonly Emulator _emulator;
     private readonly Dictionary<string, Button> _controls;
 
