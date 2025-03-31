@@ -8,7 +8,7 @@ But if you want to hack something together, go ahead and have fun!
 
 ## New!
 
-The GB.WASM folder contains a WebAssembly version of the emulator, running in the browser. It's not as fast as the WinForms version, but it's still pretty cool to see it running in the browser!
+The GB.WASM folder contains a WebAssembly version of the emulator, running in the browser. It's performance should be on-par with the WinForms version, but running in your browser!
 If you want to try that one, use `launch.bat` to publish an AOT version of the emulator and start a local web server.
 
 Here are the key bindings (click somewhere on the page if they don't seem to work):
