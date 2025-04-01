@@ -8,26 +8,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+      html, body {
+          font-family: "Segoe UI Semilight", "Segoe UI", "Segoe WP", "Helvetica Neue", "Helvetica", "Tahoma", "Arial", sans-serif;
+          margin: 0;
+          padding: 0;
+          height: 100%;
+      }
+      
       .main {
           width: 100%;
-          height: 100%;
+          height: 100vh;
           overflow: hidden;
+          display: grid;
+          grid-template-rows: auto 2rem;
       }
 
-      .flex-center {
-          display: flex;
-          height: 100vh;
-          flex: 1;
-          align-items: center;
-          justify-content: center;
+      .emulator {
+          align-self: center;
+          justify-self: center;
       }
 
       .footer {
           display: flex;
-          flex: 1;
-          align-items: center;
+          align-items: end;
           justify-content: center;
           gap: 1rem;
+          padding: 1rem;
       }
 
       .viewport {
@@ -38,11 +44,11 @@
 </head>
 
 <body class="main">
-    <div class="flex-center">
+    <div class="emulator">
         <canvas id="viewport" width="640" height="576" class="viewport"></canvas>
     </div>
     <div class="footer">
-        <a href="https://github.com/wcabus/gb-net">Fork me on github</a><br/>
+        <a href="https://github.com/wcabus/gb-net">Fork me on GitHub</a><br/>
         <button id="audioButton" type="button">Start audio</button>
         <div>Controls: W, A, S, D, K, O, ENTER, BACKSPACE</div><br/>
     </div>
