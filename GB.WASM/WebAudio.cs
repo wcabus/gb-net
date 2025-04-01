@@ -10,9 +10,9 @@ public class WebAudio : ISoundOutput
     public const int SampleRate = 22050;
 
     private byte[] _buffer;
-    private byte[] _buffer2;
     private readonly byte[] _outputBuffer;
-
+    private CircularByteBuffer _circularBuffer;
+    
     private int _i = 0;
     private int _tick;
     private readonly int _divider;
@@ -23,10 +23,10 @@ public class WebAudio : ISoundOutput
     {
         _divider = Gameboy.TicksPerSec / SampleRate;
         _samplesPerFrame = SampleRate / 60;
-        var bufferLength = _samplesPerFrame * 4;
+        var bufferLength = _samplesPerFrame * 16;
 
         _buffer = new byte[bufferLength];
-        _buffer2 = new byte[bufferLength];
+        _circularBuffer = new CircularByteBuffer(SampleRate * 5); // 5 seconds of audio
         
         _outputBuffer = new byte[bufferLength];
         Interop.SetupSoundBuffer(new ArraySegment<byte>(_outputBuffer), _buffer.Length);
@@ -42,6 +42,11 @@ public class WebAudio : ISoundOutput
             return;
         }
 
+        if (_i >= _buffer.Length)
+        {
+            return;
+        }
+        
         left = (int)(left * 0.25);
         right = (int)(right * 0.25);
 
@@ -50,16 +55,25 @@ public class WebAudio : ISoundOutput
 
         _buffer[_i++] = (byte)left;
         _buffer[_i++] = (byte)right;
+
         if (_i >= _buffer.Length)
         {
-            _buffer2 = Interlocked.Exchange(ref _buffer, _buffer2);
-            _buffer2.CopyTo(_outputBuffer, 0);
-
+            _circularBuffer.Write(_buffer, 0, _buffer.Length);
+            _i = 0;
+        }
+        
+        if (_circularBuffer.Count > 0)
+        {
+            var read = _circularBuffer.Read(_outputBuffer, 0, _outputBuffer.Length);
+            while (read < _outputBuffer.Length)
+            {
+                _outputBuffer[read++] = 0;
+            }
+            
             _synchronizationContext.Post(async _ =>
             {
                 await Interop.OutputSound();
             }, null);
-            _i = 0;
         }
     }
 
@@ -70,7 +84,5 @@ public class WebAudio : ISoundOutput
 
     public void Stop()
     {
-        Array.Clear(_buffer, 0, _buffer.Length);
-        Array.Clear(_buffer2, 0, _buffer2.Length);
     }
 }
