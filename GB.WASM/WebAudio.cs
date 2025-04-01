@@ -23,7 +23,7 @@ public class WebAudio : ISoundOutput
     {
         _divider = Gameboy.TicksPerSec / SampleRate;
         _samplesPerFrame = SampleRate / 60;
-        var bufferLength = _samplesPerFrame * 16;
+        var bufferLength = _samplesPerFrame * 32;
 
         _buffer = new byte[bufferLength];
         _circularBuffer = new CircularByteBuffer(SampleRate * 5); // 5 seconds of audio
@@ -64,15 +64,16 @@ public class WebAudio : ISoundOutput
         
         if (_circularBuffer.Count > 0)
         {
-            var read = _circularBuffer.Read(_outputBuffer, 0, _outputBuffer.Length);
-            while (read < _outputBuffer.Length)
+            var outputBuffer = new byte[_buffer.Length];
+            var read = _circularBuffer.Read(outputBuffer, 0, outputBuffer.Length);
+            while (read < outputBuffer.Length)
             {
-                _outputBuffer[read++] = 0;
+                outputBuffer[read++] = 0;
             }
             
-            _synchronizationContext.Post(async _ =>
+            _synchronizationContext.Post(_ =>
             {
-                await Interop.OutputSound();
+                Interop.OutputSoundBuffer(outputBuffer, outputBuffer.Length);
             }, null);
         }
     }

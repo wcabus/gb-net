@@ -67,11 +67,30 @@ async function outputSound() {
     await promise;
 }
 
+function outputSoundBuffer(soundBuffer, length) {
+    const soundBufferCopy = new Uint8ClampedArray(soundBuffer.slice());
+    if (_audioCtx === undefined || _audioCtx === null || _audioCtx.state !== 'running') {
+        return;
+    }
+
+    let j = 0;
+    for (let i = 0; i < length; i += 2) {
+        _leftChannel[j] = soundBufferCopy[i] / 128.0 - 1.0;
+        _rightChannel[j++] = soundBufferCopy[i + 1] / 128.0 - 1.0;
+    }
+
+    const source = _audioCtx.createBufferSource();
+    source.buffer = _audioBuffer;
+    source.connect(_audioCtx.destination);
+    source.start();
+}
+
 setModuleImports('main.js', {
     setupBuffer,
     setupSoundBuffer,
     outputImage,
-    outputSound
+    outputSound,
+    outputSoundBuffer
 });
 
 const config = getConfig();
