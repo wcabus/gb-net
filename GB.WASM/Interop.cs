@@ -11,7 +11,7 @@ public partial class Interop
     internal static partial Task OutputImage();
 
     [JSImport("setupSoundBuffer", "main.js")]
-    internal static partial void SetupSoundBuffer([JSMarshalAs<JSType.MemoryView>] ArraySegment<double> soundBuffer, int length);
+    internal static partial void SetupSoundBuffer([JSMarshalAs<JSType.MemoryView>] ArraySegment<byte> soundBuffer, int length);
 
     [JSImport("outputSound", "main.js")]
     internal static partial Task OutputSound();

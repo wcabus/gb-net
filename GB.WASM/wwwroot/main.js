@@ -44,15 +44,15 @@ async function outputImage() {
 }
 
 async function outputSound() {
-    const soundBufferCopy = new Float64Array(_soundBuffer.slice());
+    const soundBufferCopy = new Uint8ClampedArray(_soundBuffer.slice());
     if (_audioCtx === undefined || _audioCtx === null || _audioCtx.state !== 'running') {
         return;
     }
 
     let j = 0;
     for (let i = 0; i < _soundBufferLength; i += 2) {
-        _leftChannel[j] = soundBufferCopy[i];
-        _rightChannel[j++] = soundBufferCopy[i + 1];
+        _leftChannel[j] = soundBufferCopy[i] / 128.0 - 1.0;
+        _rightChannel[j++] = soundBufferCopy[i + 1] / 128.0 - 1.0;
     }
 
     const source = _audioCtx.createBufferSource();

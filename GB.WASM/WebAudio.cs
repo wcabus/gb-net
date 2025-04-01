@@ -9,9 +9,9 @@ public class WebAudio : ISoundOutput
 {
     public const int SampleRate = 22050;
 
-    private double[] _buffer;
-    private double[] _buffer2;
-    private readonly double[] _outputBuffer;
+    private byte[] _buffer;
+    private byte[] _buffer2;
+    private readonly byte[] _outputBuffer;
 
     private int _i = 0;
     private int _tick;
@@ -25,11 +25,11 @@ public class WebAudio : ISoundOutput
         _samplesPerFrame = SampleRate / 60;
         var bufferLength = _samplesPerFrame * 4;
 
-        _buffer = new double[bufferLength];
-        _buffer2 = new double[bufferLength];
+        _buffer = new byte[bufferLength];
+        _buffer2 = new byte[bufferLength];
         
-        _outputBuffer = new double[bufferLength];
-        Interop.SetupSoundBuffer(new ArraySegment<double>(_outputBuffer), _buffer.Length);
+        _outputBuffer = new byte[bufferLength];
+        Interop.SetupSoundBuffer(new ArraySegment<byte>(_outputBuffer), _buffer.Length);
 
         _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
     }
@@ -48,8 +48,8 @@ public class WebAudio : ISoundOutput
         left = left < 0 ? 0 : (left > 255 ? 255 : left);
         right = right < 0 ? 0 : (right > 255 ? 255 : right);
 
-        _buffer[_i++] = left / 128f - 1f;
-        _buffer[_i++] = right / 128f - 1f;
+        _buffer[_i++] = (byte)left;
+        _buffer[_i++] = (byte)right;
         if (_i >= _buffer.Length)
         {
             _buffer2 = Interlocked.Exchange(ref _buffer, _buffer2);
