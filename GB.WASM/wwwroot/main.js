@@ -44,7 +44,7 @@ async function outputImage() {
 }
 
 async function outputSound() {
-    const soundBufferCopy = new Float32Array(_soundBuffer.slice());
+    const soundBufferCopy = new Float64Array(_soundBuffer.slice());
     if (_audioCtx === undefined || _audioCtx === null || _audioCtx.state !== 'running') {
         return;
     }
@@ -58,7 +58,13 @@ async function outputSound() {
     const source = _audioCtx.createBufferSource();
     source.buffer = _audioBuffer;
     source.connect(_audioCtx.destination);
+    
+    const promise = new Promise((resolve) => {
+        source.onended = () => resolve();
+    })
     source.start();
+    
+    await promise;
 }
 
 setModuleImports('main.js', {
