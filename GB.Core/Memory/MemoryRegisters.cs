@@ -4,48 +4,67 @@ namespace GB.Core.Memory
 {
     internal sealed class MemoryRegisters : IAddressSpace
     {
-        private readonly Dictionary<int, IRegister> _registers;
-        private readonly Dictionary<int, int> _values = new Dictionary<int, int>();
-        private readonly RegisterType[] _allowsWrite = { RegisterType.W, RegisterType.RW };
-        private readonly RegisterType[] _allowsRead = { RegisterType.R, RegisterType.RW };
+        private readonly int _baseAddress;
+        private readonly int _range;
+        private readonly int[] _values;
+        private readonly RegisterType[] _types; // RegisterType per slot; uses (RegisterType)0xFF as "not a register"
+        private const RegisterType InvalidType = (RegisterType)0xFF;
 
         public MemoryRegisters(params IRegister[] registers)
         {
-            var map = new Dictionary<int, IRegister>();
+            if (registers.Length == 0)
+            {
+                _baseAddress = 0;
+                _range = 0;
+                _values = Array.Empty<int>();
+                _types = Array.Empty<RegisterType>();
+                return;
+            }
+
+            int min = int.MaxValue, max = int.MinValue;
             foreach (var r in registers)
             {
-                if (map.ContainsKey(r.Address))
+                if (r.Address < min) min = r.Address;
+                if (r.Address > max) max = r.Address;
+            }
+
+            _baseAddress = min;
+            _range = max - min + 1;
+            _values = new int[_range];
+            _types = new RegisterType[_range];
+            Array.Fill(_types, InvalidType);
+
+            foreach (var r in registers)
+            {
+                var idx = r.Address - _baseAddress;
+                if (_types[idx] != InvalidType)
                 {
                     throw new ArgumentException($"Two registers with the same address: {r.Address}");
                 }
-
-                map.Add(r.Address, r);
-                _values.Add(r.Address, 0);
+                _types[idx] = r.Type;
             }
-
-            _registers = map;
         }
 
         private MemoryRegisters(MemoryRegisters original)
         {
-            _registers = original._registers;
-            _values = new Dictionary<int, int>(original._values);
+            _baseAddress = original._baseAddress;
+            _range = original._range;
+            _values = (int[])original._values.Clone();
+            _types = original._types; // types are immutable, share the array
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int Get(IRegister reg)
         {
-            return _registers.ContainsKey(reg.Address)
-                ? _values[reg.Address]
-                : throw new ArgumentException("Not a valid register: " + reg);
+            var idx = reg.Address - _baseAddress;
+            return _values[idx];
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Put(IRegister reg, int value)
         {
-            _values[reg.Address] = _registers.ContainsKey(reg.Address)
-                ? value
-                : throw new ArgumentException("Not a valid register: " + reg);
+            var idx = reg.Address - _baseAddress;
+            _values[idx] = value;
         }
 
         public MemoryRegisters Freeze() => new MemoryRegisters(this);
@@ -53,34 +72,36 @@ namespace GB.Core.Memory
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int PreIncrement(IRegister reg)
         {
-            if (!_registers.ContainsKey(reg.Address))
-            {
-                throw new ArgumentException("Not a valid register: " + reg);
-            }
-
-            var value = _values[reg.Address] + 1;
-            _values[reg.Address] = value;
+            var idx = reg.Address - _baseAddress;
+            var value = _values[idx] + 1;
+            _values[idx] = value;
             return value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool Accepts(int address) => _registers.ContainsKey(address);
+        public bool Accepts(int address)
+        {
+            var idx = address - _baseAddress;
+            return (uint)idx < (uint)_range && _types[idx] != InvalidType;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetByte(int address, int value)
         {
-            var regType = _registers[address].Type;
-            if (_allowsWrite.Contains(regType))
+            var idx = address - _baseAddress;
+            var regType = _types[idx];
+            if (regType == RegisterType.W || regType == RegisterType.RW)
             {
-                _values[address] = value;
+                _values[idx] = value;
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetByte(int address)
         {
-            var regType = _registers[address].Type;
-            return _allowsRead.Contains(regType) ? _values[address] : 0xff;
+            var idx = address - _baseAddress;
+            var regType = _types[idx];
+            return (regType == RegisterType.R || regType == RegisterType.RW) ? _values[idx] : 0xff;
         }
     }
 }

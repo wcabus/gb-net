@@ -10,7 +10,7 @@ namespace GB.Core.Graphics.Phase
             ReadingX
         }
 
-        public sealed record SpritePosition(int X, int Y, int Address);
+        public readonly record struct SpritePosition(int X, int Y, int Address);
 
         private readonly IAddressSpace _oemRam;
         private readonly MemoryRegisters _registers;
@@ -27,7 +27,7 @@ namespace GB.Core.Graphics.Phase
             _oemRam = oemRam;
             _registers = registers;
             _lcdc = lcdc;
-            _sprites = new SpritePosition[10];
+            _sprites = new SpritePosition?[10];
         }
 
         public OamSearch Start()

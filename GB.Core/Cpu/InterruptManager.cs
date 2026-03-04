@@ -151,17 +151,9 @@ namespace GB.Core.Cpu
                 };
             }
 
-            public static IEnumerable<InterruptType> Values
-            {
-                get
-                {
-                    yield return VBlank;
-                    yield return Lcdc;
-                    yield return Timer;
-                    yield return Serial;
-                    yield return P1013;
-                }
-            }
+            private static readonly InterruptType[] _values = { VBlank, Lcdc, Timer, Serial, P1013 };
+
+            public static InterruptType[] Values => _values;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GB.Core.Cpu.InstructionSet;
 using GB.Core.Graphics;
+using GB.Core.Memory;
 
 namespace GB.Core.Cpu
 {
@@ -7,11 +8,12 @@ namespace GB.Core.Cpu
     {
         private readonly CpuRegisters _registers;
 
-        private readonly IAddressSpace _addressSpace;
+        private readonly Mmu _addressSpace;
         private readonly InterruptManager _interruptManager;
         private readonly Gpu _gpu;
         private readonly IDisplay _display;
         private readonly SpeedMode _speedMode;
+        private bool _gbc;
 
         internal CpuState State = CpuState.OpCode;
         private int _cycles;
@@ -32,7 +34,7 @@ namespace GB.Core.Cpu
 
         private InterruptManager.InterruptType _requestedIrq = InterruptManager.InterruptType.None;
 
-        public Processor(IAddressSpace addressSpace, InterruptManager interruptManager, Gpu gpu, IDisplay display, SpeedMode speedMode)
+        public Processor(Mmu addressSpace, InterruptManager interruptManager, Gpu gpu, IDisplay display, SpeedMode speedMode)
         {
             _registers = new();
 
@@ -45,6 +47,7 @@ namespace GB.Core.Cpu
 
         public void InitializeRegisters(bool gbc)
         {
+            _gbc = gbc;
             _registers.AF = 0x01b0;
             if (gbc)
             {
@@ -218,7 +221,8 @@ namespace GB.Core.Cpu
                         if (_opIndex < _ops.Length)
                         {
                             var op = _ops[_opIndex];
-                            var opAccessesMemory = op.ReadsMemory() || op.WritesMemory();
+                            var opFlags = op.Flags;
+                            var opAccessesMemory = (opFlags & OperationFlags.AccessesMemory) != 0;
                             if (accessedMemory && opAccessesMemory)
                             {
                                 return;
@@ -226,22 +230,29 @@ namespace GB.Core.Cpu
 
                             _opIndex++;
 
-                            var corruptionType = op.CausesOamBug(_registers, _opContext);
-                            if (corruptionType != null)
+                            if ((opFlags & OperationFlags.HasOamBug) != 0)
                             {
-                                HandleSpriteBug(corruptionType.Value);
+                                var corruptionType = op.CausesOamBug(_registers, _opContext);
+                                if (corruptionType != null)
+                                {
+                                    HandleSpriteBug(corruptionType.Value);
+                                }
                             }
 
                             _opContext = op.Execute(_registers, _addressSpace, _operand, _opContext);
-                            op.SwitchInterrupts(_interruptManager);
 
-                            if (!op.ShouldProceed(_registers))
+                            if ((opFlags & OperationFlags.HasSwitchInterrupts) != 0)
+                            {
+                                op.SwitchInterrupts(_interruptManager);
+                            }
+
+                            if ((opFlags & OperationFlags.HasShouldProceed) != 0 && !op.ShouldProceed(_registers))
                             {
                                 _opIndex = _ops.Length;
                                 break;
                             }
 
-                            if (op.ForceFinishCycle())
+                            if ((opFlags & OperationFlags.ForceFinishCycle) != 0)
                             {
                                 return;
                             }
@@ -328,6 +339,11 @@ namespace GB.Core.Cpu
 
         private void HandleSpriteBug(CorruptionType type)
         {
+            if (_gbc)
+            {
+                return; // OAM corruption bug does not exist on GBC
+            }
+
             if (!_gpu.GetLcdc().IsLcdEnabled())
             {
                 return;

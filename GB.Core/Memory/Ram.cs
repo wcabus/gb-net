@@ -4,13 +4,13 @@ namespace GB.Core.Memory
 {
     internal sealed class Ram : IAddressSpace
     {
-        private readonly int[] _space;
+        private readonly byte[] _space;
         private readonly int _length;
         private readonly int _offset;
 
         public Ram(int offset, int length)
         {
-            _space = new int[length];
+            _space = new byte[length];
             _length = length;
             _offset = offset;
         }
@@ -19,7 +19,7 @@ namespace GB.Core.Memory
         public bool Accepts(int address) => address >= _offset && address < _offset + _length;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetByte(int address, int value) => _space[address - _offset] = value;
+        public void SetByte(int address, int value) => _space[address - _offset] = (byte)value;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetByte(int address)

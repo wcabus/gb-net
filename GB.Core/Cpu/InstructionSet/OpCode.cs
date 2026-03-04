@@ -4,8 +4,8 @@ namespace GB.Core.Cpu.InstructionSet;
 
 internal struct OpCode : IEquatable<OpCode>
 {
-    private static readonly List<OpCode> _opCodes = new();
-    private static readonly List<OpCode> _extendedOpCodes = new();
+    private static readonly OpCode[] _opCodes;
+    private static readonly OpCode[] _extendedOpCodes;
 
     public static readonly OpCode NotSet = new OpCode();
 
@@ -205,12 +205,12 @@ internal struct OpCode : IEquatable<OpCode>
             }
         }
 
-        _opCodes.AddRange(opCodes.Select(b => b?.Build() ?? NotSet));
-        _extendedOpCodes.AddRange(extendedOpCodes.Select(b => b?.Build() ?? NotSet));
+        _opCodes = opCodes.Select(b => b?.Build() ?? NotSet).ToArray();
+        _extendedOpCodes = extendedOpCodes.Select(b => b?.Build() ?? NotSet).ToArray();
     }
 
-    public static IReadOnlyList<OpCode> OpCodes => _opCodes;
-    public static IReadOnlyList<OpCode> ExtendedOpCodes => _extendedOpCodes;
+    public static OpCode[] OpCodes => _opCodes;
+    public static OpCode[] ExtendedOpCodes => _extendedOpCodes;
 
     private static InstructionBuilder RegisterCommand(IList<InstructionBuilder> commands, KeyValuePair<int, string> opCodeAndOperand, string name)
     {
@@ -255,7 +255,7 @@ internal struct OpCode : IEquatable<OpCode>
         Value = builder.GetOpCode();
         Name = builder.GetName();
         Operations = builder.GetOperations().ToArray();
-        Length = Operations.Length <= 0 ? 0 : Operations.Max(x => x.Length());
+        Length = Operations.Length <= 0 ? 0 : Operations.Max(x => x.OperandLength);
     }
 
     public int Value { get; }

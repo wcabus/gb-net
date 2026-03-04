@@ -89,16 +89,17 @@ namespace GB.Core.Graphics.Phase
                         continue;
                     }
 
-                    if (_x == 0 && s.X < 8)
+                    var sv = s.Value;
+                    if (_x == 0 && sv.X < 8)
                     {
-                        _fetcher.AddSprite(s, 8 - s.X, i);
+                        _fetcher.AddSprite(sv, 8 - sv.X, i);
                         spriteAdded = true;
 
                         _sprites[i] = null;
                     }
-                    else if (s.X - 8 == _x)
+                    else if (sv.X - 8 == _x)
                     {
-                        _fetcher.AddSprite(s, 0, i);
+                        _fetcher.AddSprite(sv, 0, i);
                         spriteAdded = true;
 
                         _sprites[i] = null;

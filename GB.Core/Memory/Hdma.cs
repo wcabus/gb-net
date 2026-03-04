@@ -52,6 +52,7 @@ namespace GB.Core.Memory
 
             _src += 0x10;
             _dst += 0x10;
+            _tick = 0;
             if (_length-- == 0)
             {
                 _transferInProgress = false;
@@ -133,6 +134,7 @@ namespace GB.Core.Memory
             _dst = (_dst & 0x1FFF) | 0x8000;
 
             _transferInProgress = true;
+            _tick = 0;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

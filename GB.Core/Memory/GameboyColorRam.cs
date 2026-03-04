@@ -2,7 +2,7 @@
 {
     internal sealed class GameboyColorRam : IAddressSpace
     {
-        private readonly int[] _ram = new int[7 * 0x1000];
+        private readonly byte[] _ram = new byte[7 * 0x1000];
         private int _svbk;
 
         public bool Accepts(int address) => address is 0xFF70 or >= 0xD000 and < 0xE000;
@@ -15,11 +15,11 @@
             }
             else
             {
-                _ram[Translate(address)] = value;
+                _ram[Translate(address)] = (byte)value;
             }
         }
 
-        public int GetByte(int address) => address == 0xFF70 ? _svbk : _ram[Translate(address)];
+        public int GetByte(int address) => address == 0xFF70 ? (_svbk | 0xF8) : _ram[Translate(address)];
 
         private int Translate(int address)
         {

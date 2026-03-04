@@ -20,14 +20,6 @@ namespace GB.Core.Graphics
 
         private static readonly int[] EmptyPixelLine = new int[8];
 
-        private static readonly State[] SpritesInProgress = new[] {
-            State.ReadSpriteTileId,
-            State.ReadSpriteFlags,
-            State.ReadSpriteData1,
-            State.ReadSpriteData2,
-            State.PushSprite
-        };
-
         private readonly IPixelFifo _fifo;
         private readonly IAddressSpace _videoRam0;
         private readonly IAddressSpace? _videoRam1;
@@ -166,12 +158,12 @@ namespace GB.Core.Graphics
                     break;
 
                 case State.ReadSpriteTileId:
-                    _tileId = _oemRam.GetByte(_sprite!.Address + 2);
+                    _tileId = _oemRam.GetByte(_sprite!.Value.Address + 2);
                     _state = State.ReadSpriteFlags;
                     break;
 
                 case State.ReadSpriteFlags:
-                    _spriteAttributes = TileAttributes.ValueOf(_oemRam.GetByte(_sprite!.Address + 3));
+                    _spriteAttributes = TileAttributes.ValueOf(_oemRam.GetByte(_sprite!.Value.Address + 3));
                     _state = State.ReadSpriteData1;
                     break;
 
@@ -211,7 +203,7 @@ namespace GB.Core.Graphics
 
         public bool SpriteInProgress()
         {
-            return SpritesInProgress.Contains(_state);
+            return _state >= State.ReadSpriteTileId && _state <= State.PushSprite;
         }
 
         public int[] Zip(int data1, int data2, bool reverse)

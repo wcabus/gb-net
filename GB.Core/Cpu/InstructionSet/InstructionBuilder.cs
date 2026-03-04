@@ -198,10 +198,9 @@ namespace GB.Core.Cpu.InstructionSet
             public LoadOperation(Operand operand)
             {
                 _operand = operand;
+                if (operand.AccessesMemory) Flags |= OperationFlags.ReadsMemory;
+                OperandLength = operand.Bytes;
             }
-
-            public override bool ReadsMemory() => _operand.AccessesMemory;
-            public override int Length() => _operand.Bytes;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context) => _operand.Read(registers, addressSpace, args);
 
@@ -234,10 +233,9 @@ namespace GB.Core.Cpu.InstructionSet
             public StoreOperation(Operand operand)
             {
                 _operand = operand;
+                if (operand.AccessesMemory) Flags |= OperationFlags.WritesMemory;
+                OperandLength = operand.Bytes;
             }
-
-            public override bool WritesMemory() => _operand.AccessesMemory;
-            public override int Length() => _operand.Bytes;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -261,10 +259,9 @@ namespace GB.Core.Cpu.InstructionSet
             public StoreLSBOperation(Operand operand)
             {
                 _operand = operand;
+                if (operand.AccessesMemory) Flags |= OperationFlags.WritesMemory;
+                OperandLength = operand.Bytes;
             }
-
-            public override bool WritesMemory() => _operand.AccessesMemory;
-            public override int Length() => _operand.Bytes;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -288,10 +285,9 @@ namespace GB.Core.Cpu.InstructionSet
             public StoreMSBOperation(Operand operand)
             {
                 _operand = operand;
+                if (operand.AccessesMemory) Flags |= OperationFlags.WritesMemory;
+                OperandLength = operand.Bytes;
             }
-
-            public override bool WritesMemory() => _operand.AccessesMemory;
-            public override int Length() => _operand.Bytes;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -319,6 +315,7 @@ namespace GB.Core.Cpu.InstructionSet
                 _func = func;
                 _operation = operation;
                 _lastUsedDataType = lastUsedDataType;
+                Flags |= OperationFlags.HasOamBug;
             }
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context) => _func(registers.Flags, context);
@@ -371,10 +368,9 @@ namespace GB.Core.Cpu.InstructionSet
                 _operand = operand;
                 _operation = operation;
                 _lastUsedDataType = lastUsedDataType;
+                if (operand.AccessesMemory) Flags |= OperationFlags.ReadsMemory;
+                OperandLength = operand.Bytes;
             }
-
-            public override bool ReadsMemory() => _operand.AccessesMemory;
-            public override int Length() => _operand.Bytes;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -400,6 +396,7 @@ namespace GB.Core.Cpu.InstructionSet
             public AluOperationWithHL(Func<Flags, int, int> func)
             {
                 _func = func;
+                Flags |= OperationFlags.HasOamBug;
             }
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
@@ -425,9 +422,8 @@ namespace GB.Core.Cpu.InstructionSet
             public PopLSBOperation(Func<Flags, int, int> func)
             {
                 _func = func;
+                Flags |= OperationFlags.ReadsMemory | OperationFlags.HasOamBug;
             }
-
-            public override bool ReadsMemory() => true;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -454,9 +450,8 @@ namespace GB.Core.Cpu.InstructionSet
             public PopMSBOperation(Func<Flags, int, int> func)
             {
                 _func = func;
+                Flags |= OperationFlags.ReadsMemory | OperationFlags.HasOamBug;
             }
-
-            public override bool ReadsMemory() => true;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -483,9 +478,8 @@ namespace GB.Core.Cpu.InstructionSet
             public PushMSBOperation(Func<Flags, int, int> func)
             {
                 _func = func;
+                Flags |= OperationFlags.WritesMemory | OperationFlags.HasOamBug;
             }
-
-            public override bool WritesMemory() => true;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -512,9 +506,8 @@ namespace GB.Core.Cpu.InstructionSet
             public PushLSBOperation(Func<Flags, int, int> func)
             {
                 _func = func;
+                Flags |= OperationFlags.WritesMemory | OperationFlags.HasOamBug;
             }
-
-            public override bool WritesMemory() => true;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -541,6 +534,7 @@ namespace GB.Core.Cpu.InstructionSet
             public ProceedIfOperation(string condition)
             {
                 _condition = condition;
+                Flags |= OperationFlags.HasShouldProceed;
             }
 
             public override bool ShouldProceed(CpuRegisters registers)
@@ -568,9 +562,8 @@ namespace GB.Core.Cpu.InstructionSet
             public BitHLOperation(int bit)
             {
                 _bit = bit;
+                Flags |= OperationFlags.ReadsMemory;
             }
-
-            public override bool ReadsMemory() => true;
 
             public override int Execute(CpuRegisters registers, IAddressSpace addressSpace, int[] args, int context)
             {
@@ -612,6 +605,7 @@ namespace GB.Core.Cpu.InstructionSet
             {
                 _enable = enable;
                 _withDelay = withDelay;
+                Flags |= OperationFlags.HasSwitchInterrupts;
             }
 
             public override void SwitchInterrupts(InterruptManager interruptManager)
@@ -637,7 +631,10 @@ namespace GB.Core.Cpu.InstructionSet
         /// </summary>
         private sealed class ExtraCycleOperation : Operation
         {
-            public override bool ReadsMemory() => true;
+            public ExtraCycleOperation()
+            {
+                Flags |= OperationFlags.ReadsMemory;
+            }
             public override string ToString() => "wait cycle";
         }
 
@@ -646,7 +643,10 @@ namespace GB.Core.Cpu.InstructionSet
         /// </summary>
         private sealed class ForceFinishCycleOperation : Operation
         {
-            public override bool ForceFinishCycle() => true;
+            public ForceFinishCycleOperation()
+            {
+                Flags |= OperationFlags.ForceFinishCycle;
+            }
             public override string ToString() => "finish cycle";
         }
     }

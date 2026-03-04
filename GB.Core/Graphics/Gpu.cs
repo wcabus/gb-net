@@ -83,6 +83,7 @@ namespace GB.Core.Graphics
                 case 0xFF49: // OBJ Palette 1
                 case 0xFF4A: // Window Y pos
                 case 0xFF4B: // Window X pos
+                case 0xFF4F: // VBK (GBC VRAM bank select)
                     return _r;
             }
             
@@ -143,7 +144,7 @@ namespace GB.Core.Graphics
 
             if (address == GpuRegister.Vbk.Address)
             {
-                return _gbc ? 0xFE : 0xFF;
+                return _gbc ? (0xFE | (_r.Get(GpuRegister.Vbk) & 1)) : 0xFF;
             }
 
             var space = GetAddressSpace(address);
